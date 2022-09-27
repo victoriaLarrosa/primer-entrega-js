@@ -59,6 +59,7 @@ if (tienda === "si") {
         let producto = prompt ("stella $320  -  zillertal $300  -  zillertal ipa $300  -  zillertal apa $300  -  patricia $280. Agrega un producto a tu carrito: ")
         let precio = 0
         
+        producto = producto.toLowerCase()
         if(producto === "stella" || producto === "zillertal" || producto === "zillertal ipa" || producto === "zillertal apa" || producto === "patricia"){
             switch(producto) {
                 case "stella":

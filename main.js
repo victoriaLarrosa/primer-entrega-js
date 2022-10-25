@@ -1,77 +1,8 @@
-/*function carritoFinal() {
-      alert("Gracias por la compra")
-      carrito.forEach((carritoFinal) => {
-         console.log("Producto: " + carritoFinal.nombre + " , unidades: " + carritoFinal.unidades + ", total a pagar por producto " + carritoFinal.unidades * carritoFinal.precio)
-    })
-
-  const total = carrito.reduce((acc, el) => acc + el.precio * el.unidades, 0)
-
-  alert(`el total a paga por su compra es: ${total}`)
-}
-
-function validarSeleccion() {
-
-    seleccion = prompt("Desea seguir comprando? ingrese si o no")
-
-    if (seleccion === "si" || seleccion === "no") {
-        
-        pedidoUsuario = true
-        
-        return seleccion
-    }
-
-    else {
-        pedidoUsuario = false
-    }
-
-    while (pedidoUsuario === false) {
-
-        alert("Error: ingrese si o no para continuar")
-
-        validarSeleccion()
-    }
-}
-*/
 const shopContent = document.getElementById("shopContent")
 const verCarito = document.getElementById("verCarrito")
 const modalContainer = document.getElementById("modal-container")
 
-
-const productos = [
-    {
-    id:1,
-    nombre: "stella",
-    precio: 320,
-    img: "./assets/stella.jpg"},
-
-    {
-    id:2,
-    nombre: "zillertal",
-    precio: 300,
-    img: "./assets/zillertal.jpg"},
-
-    {
-    id:3,
-    nombre: "zillertal ipa",
-    precio: 320,
-    img: "./assets/zillertal-ipa.png"},
-
-    {
-    id:4,
-    nombre: "zillertal apa",
-    precio: 320,
-    img: "./assets/zillertal-apa.jpg"},
-
-    {
-    id:5,
-    nombre: "patricia",
-    precio: 280,
-    img: "./assets/lager.png",
-    },
-
-];
-
-let carrito = []
+let carrito = JSON.parse(localStorage.getItem("compras")) || [];
 
 productos.forEach ((product) => {
     let content = document.createElement ("div");
@@ -85,7 +16,7 @@ productos.forEach ((product) => {
 
     let comprar = document.createElement("button")
     comprar.className = "comprar";
-    comprar.innerText = "comprar";
+    comprar.innerText = "Añadir al carrito";
 
     content.append(comprar);
 
@@ -97,10 +28,11 @@ productos.forEach ((product) => {
             precio: product.precio,
         });
         console.log (carrito);
+        productosGuardados();
     }); 
 });
 
-verCarrito.addEventListener("click", () => {
+const productosCarrito = () => {
     modalContainer.innerHTML = ""
     modalContainer.style.display = "flex"
     const modalHeader = document.createElement("div")
@@ -129,6 +61,13 @@ verCarrito.addEventListener("click", () => {
         <p>$${product.precio}</p>
     `;
     modalContainer.append(carritoContent);
+
+    let eliminar = document.createElement("span")
+    eliminar.innerText = "X";
+    eliminar.className = "eliminar-producto"
+    carritoContent.append(eliminar);
+
+    eliminar.addEventListener("click", eliminarProd)
     });
 
     const total = carrito.reduce((acc, el) => acc + el.precio, 0);
@@ -136,70 +75,27 @@ verCarrito.addEventListener("click", () => {
     const compraTotal = document.createElement("div")
     compraTotal.className = "compra-total"
     compraTotal.innerHTML = `El total a pagar es de: $${total}`;
-    modalContainer.append(compraTotal)
+    modalContainer.append(compraTotal);
+};
 
-});
+verCarrito.addEventListener("click", productosCarrito);
 
+const eliminarProd = () => {
+    const foundId = carrito.find((element) => element.id);
+    
+    carrito = carrito.filter((carritoId) => {
+        return carritoId !== foundId;
+    });
 
-
-/*let tienda = prompt("Bienvenido a TodoAca, Usted esta ubicado en la seccion de CERVEZAS, Ingrese 'si' en caso de querer continuar, o 'no' en caso de querer cancelar la compra");
-
-while(tienda != "si" && tienda != "no"){
-    alert("Porfavor, Ingrese si o  no")
-    tienda = prompt ("Desea ver nuestras cervezas, si o no?")
+    productosCarrito();
+    productosGuardados(); 
 }
 
-if (tienda === "si") {
-    ("a continuacion le mostraremos nuestra variedad de cervezas para que pueda elegir")
+//Probando localStorage y JSON
 
-    seleccion = tienda
-
-    while (seleccion === "si"){
-        let producto = prompt ("stella $320  -  zillertal $300  -  zillertal ipa $300  -  zillertal apa $300  -  patricia $280. Agrega un producto a tu carrito: ")
-        let precio = 0
-        
-        producto = producto.toLowerCase()
-        if(producto === "stella" || producto === "zillertal" || producto === "zillertal ipa" || producto === "zillertal apa" || producto === "patricia"){
-            switch(producto) {
-                case "stella":
-                    precio = 320;
-                    break;
-                case "zillertal":
-                    precio = 300;
-                    break;
-                case "zillertal ipa":
-                    precio = 300;
-                    break;
-                case "zillertal apa":
-                    precio = 300;
-                    break;
-                case "patricia":
-                    precio = 280;
-                    break;
-                default: 
-                    break;
-            }
-        let unidades = parseInt(prompt("Cuantas unidades desea llevar? Ingrese solo numeros")) 
-
-        nombre = producto
-    
-        carrito.push({nombre, unidades, precio})
-        console.log (carrito)}
-    
-        else {
-            alert("no tenemos ese producto")
-        }
-    
-        validarSeleccion()
-    }
-
-    carritoFinal()
-
-} else if (tienda === "no") {
-    alert("Gracias por visitarnos, hasta pronto!")
-
-}
-*/
+const productosGuardados = () => {
+localStorage.setItem("compras", JSON.stringify(carrito));
+};
 
 
 

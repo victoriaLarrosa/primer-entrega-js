@@ -2,7 +2,70 @@ const shopContent = document.getElementById("shopContent")
 const verCarito = document.getElementById("verCarrito")
 const modalContainer = document.getElementById("modal-container")
 
+
+
 let carrito = JSON.parse(localStorage.getItem("compras")) || [];
+
+function Birra(id, nombre, precio, img) {
+    this.id = id;
+    this.nombre = nombre;
+    this.precio = precio;
+    this.img = img;
+}
+
+const productos = [
+    {
+    id:1,
+    nombre: "stella",
+    precio: 320,
+    img: "./assets/stella.jpg"},
+
+    {
+    id:2,
+    nombre: "zillertal",
+    precio: 300,
+    img: "./assets/zillertal.jpg"},
+
+    {
+    id:3,
+    nombre: "zillertal ipa",
+    precio: 320,
+    img: "./assets/zillertal-ipa.png"},
+
+    {
+    id:4,
+    nombre: "zillertal apa",
+    precio: 320,
+    img: "./assets/zillertal-apa.jpg"},
+
+    {
+    id:5,
+    nombre: "patricia",
+    precio: 280,
+    img: "./assets/lager.png",
+    },
+
+];
+
+let productosJzon = []
+const pedirArray = async () => {
+    const resp = await fetch("/api.json");
+    const productos = await resp.json();
+    for (let cerveza of productos) {
+      let cervezaNueva = new Birra(
+        cerveza.id,
+        cerveza.nombre,
+        cerveza.precio,
+        cerveza.img
+      );
+      productosJzon.push(cervezaNueva);
+    }
+  };
+  pedirArray();
+
+  console.log(productosJzon)
+  console.log("array json")
+
 
 productos.forEach ((product) => {
     let content = document.createElement ("div");
